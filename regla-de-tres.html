@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REGLA DE TRES</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f13;
+  --surface: #161820;
+  --surface2: #1d1f29;
+  --ink: #e8e6f0;
+  --ink-mid: #8b89a0;
+  --ink-light: #4a4860;
+  --accent: #e05a30;
+  --accent-bg: rgba(224,90,48,0.10);
+  --accent-border: rgba(224,90,48,0.30);
+  --blue: #4a82f0;
+  --blue-bg: rgba(74,130,240,0.10);
+  --blue-border: rgba(74,130,240,0.30);
+  --green: #2ecc71;
+  --green-bg: rgba(46,204,113,0.08);
+  --green-border: rgba(46,204,113,0.28);
+  --border: #2a2c3a;
+  --shadow: 0 2px 20px rgba(0,0,0,0.40);
+  --mono: 'DM Mono', monospace;
+  --sans: 'Syne', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); min-height:100vh; }
+
+header { background:var(--surface); border-bottom:1px solid var(--border); padding:18px 36px; display:flex; align-items:baseline; gap:14px; }
+header h1 { font-size:19px; font-weight:800; letter-spacing:.5px; }
+.header-sub { font-family:var(--mono); font-size:10px; color:var(--ink-light); letter-spacing:2px; margin-left:auto; }
+
+.tabs { display:flex; background:var(--surface); border-bottom:2px solid var(--border); padding:0 36px; }
+.tab { font-family:var(--sans); font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:13px 22px 14px; cursor:pointer; border:none; background:transparent; color:var(--ink-light); border-bottom:2px solid transparent; margin-bottom:-2px; transition:color .15s,border-color .15s; }
+.tab:hover { color:var(--ink-mid); }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+main { max-width:860px; margin:0 auto; padding:36px 24px; }
+.page { display:none; }
+.page.active { display:block; }
+
+.card { background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow); margin-bottom:18px; }
+.card-head { padding:12px 20px; border-bottom:1px solid var(--border); background:var(--surface2); }
+.card-title { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--ink-mid); text-transform:uppercase; }
+.card-body { padding:22px; }
+
+.slabel { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--ink-light); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.slabel::after { content:''; flex:1; height:1px; background:var(--border); }
+
+input[type=number], input[type=text] { width:100%; background:var(--bg); border:1px solid var(--border); font-family:var(--mono); font-size:15px; color:var(--ink); padding:9px 13px; outline:none; transition:border-color .18s,box-shadow .18s; -moz-appearance:textfield; }
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button { -webkit-appearance:none; }
+input:focus { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-bg); }
+input::placeholder { color:var(--ink-light); }
+
+.result-box { border:1px solid var(--green-border); background:var(--green-bg); padding:20px 22px; margin-top:18px; animation:fadeIn .25s ease; }
+.r-label { font-family:var(--mono); font-size:10px; letter-spacing:3px; color:var(--green); text-transform:uppercase; margin-bottom:8px; }
+.r-val { font-family:var(--mono); font-size:38px; color:var(--green); letter-spacing:-1px; line-height:1; margin-bottom:10px; }
+.r-formula { font-family:var(--mono); font-size:11px; color:var(--ink-mid); letter-spacing:.5px; padding-top:10px; border-top:1px solid var(--green-border); }
+.r-explain { font-family:var(--mono); font-size:10px; color:var(--ink-light); margin-top:6px; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+.btn { font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:9px 20px; cursor:pointer; border:1px solid var(--border); transition:all .15s; }
+.btn-primary { background:var(--ink); color:#fff; border-color:var(--ink); }
+.btn-primary:hover { background:var(--accent); border-color:var(--accent); }
+.btn-blue { background:var(--blue-bg); color:var(--blue); border-color:var(--blue-border); }
+.btn-blue:hover { background:rgba(26,79,200,.14); }
+.btn-red { background:var(--accent-bg); color:var(--accent); border-color:var(--accent-border); }
+
+.di-toggle { display:inline-flex; border:1px solid var(--border); overflow:hidden; }
+.di-btn { font-family:var(--mono); font-size:10px; letter-spacing:1px; padding:6px 12px; cursor:pointer; border:none; background:var(--surface2); color:var(--ink-light); transition:all .13s; white-space:nowrap; }
+.di-btn.sel-d { background:var(--blue); color:#fff; }
+.di-btn.sel-i { background:var(--accent); color:#fff; }
+
+.comp-table { width:100%; border-collapse:collapse; }
+.comp-table th { font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--ink-light); text-transform:uppercase; padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); background:var(--surface2); }
+.comp-table td { padding:5px 8px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.comp-table tr:last-child td { border-bottom:none; }
+.comp-table tr:hover td { background:rgba(0,0,0,.015); }
+.comp-table input { font-size:14px; padding:8px 10px; background:var(--surface2); border-color:transparent; }
+.comp-table input:focus { background:var(--surface); border-color:var(--accent); }
+.del-btn { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:13px; padding:4px 8px; transition:color .13s; opacity:0; }
+tr:hover .del-btn { opacity:1; }
+.del-btn:hover { color:var(--accent); }
+
+.prop-note { font-family:var(--mono); font-size:10px; color:var(--ink-light); letter-spacing:.5px; display:flex; gap:16px; flex-wrap:wrap; }
+.dot { width:8px; height:8px; border-radius:1px; display:inline-block; margin-right:4px; }
+.dot-d { background:var(--blue); }
+.dot-i { background:var(--accent); }
+
+/* multi */
+.param-row { display:grid; grid-template-columns:28px 1fr 18px 140px 32px; align-items:center; border-bottom:1px solid var(--border); }
+.param-row:last-child { border-bottom:none; }
+.param-row:hover { background:var(--surface2); }
+.pnum { font-family:var(--mono); font-size:10px; color:var(--ink-light); text-align:center; }
+.param-row input { border:none; box-shadow:none; background:transparent; padding:12px 11px; font-size:14px; }
+.param-row input:focus { background:var(--accent-bg); box-shadow:none; border:none; }
+.pval { font-family:var(--mono); font-size:14px; color:var(--accent); text-align:right; }
+.pdel { background:none; border:none; cursor:pointer; color:var(--ink-light); font-size:13px; display:flex; align-items:center; justify-content:center; height:100%; opacity:0; transition:color .13s,opacity .13s; }
+.param-row:hover .pdel { opacity:1; }
+.pdel:hover { color:var(--accent); }
+
+.pill { font-family:var(--mono); font-size:11px; padding:5px 12px; border:1px solid var(--border); cursor:pointer; background:var(--surface2); color:var(--ink-mid); border-radius:2px; transition:all .13s; white-space:nowrap; }
+.pill.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.pill:hover:not(.active) { border-color:var(--accent); color:var(--accent); }
+
+.mgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin-top:20px; }
+.mcard { background:var(--surface); border:1px solid var(--border); padding:18px 20px; position:relative; overflow:hidden; animation:fadeIn .25s ease; box-shadow:var(--shadow); }
+.mcard::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green),transparent 70%); }
+.mc-label { font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--ink-light); text-transform:uppercase; margin-bottom:8px; }
+.mc-val { font-family:var(--mono); font-size:26px; color:var(--green); letter-spacing:-1px; margin-bottom:4px; }
+.mc-unit { font-family:var(--sans); font-size:13px; font-weight:600; color:var(--ink-mid); }
+.mc-formula { font-family:var(--mono); font-size:10px; color:var(--ink-light); margin-top:8px; padding-top:8px; border-top:1px solid var(--border); }
+
+.preset-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.pset { font-family:var(--mono); font-size:10px; letter-spacing:1px; color:var(--ink-mid); background:var(--surface); border:1px solid var(--border); padding:6px 12px; cursor:pointer; border-radius:2px; transition:all .13s; }
+.pset:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-bg); }
+
+.empty { text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--ink-light); letter-spacing:2px; grid-column:1/-1; }
+
+.info-box { background:var(--surface); border:1px solid var(--border); box-shadow:var(--shadow); margin-bottom:24px; padding:18px 22px; font-family:var(--mono); font-size:11px; color:var(--ink-mid); line-height:1.8; letter-spacing:.5px; }
+
+@media(max-width:600px){
+  header,.tabs{padding-left:16px;padding-right:16px;}
+  main{padding:20px 12px;}
+  .comp-table th:nth-child(5),.comp-table td:nth-child(5){display:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>REGLA DE TRES</h1>
+  <span class="header-sub">Simple · Compuesta · Múltiple</span>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('comp')" id="tab-comp">⊞ Regla de tres compuesta</button>
+  <button class="tab" onclick="showTab('multi')" id="tab-multi">⇄ Conversión proporcional</button>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════
+     TAB 1: REGLA DE TRES COMPUESTA
+═══════════════════════════════ -->
+<div class="page active" id="page-comp">
+
+  <div class="info-box">
+    Ingresá cada variable con su valor en la <strong>situación A</strong> y en la <strong>situación B</strong>.
+    Indicá si la relación es <strong style="color:var(--blue)">DIRECTA</strong> (cuanto más A, más X)
+    o <strong style="color:var(--accent)">INVERSA</strong> (cuanto más A, menos X).
+    El valor <strong style="color:var(--green)">X</strong> se calcula con la regla de tres compuesta.<br>
+    <em style="color:var(--ink-light)">Ej: 6 obreros en 4 días hacen 120 ladrillos → ¿cuánto hacen 9 obreros en 3 días?</em>
+  </div>
+
+  <div class="slabel">Ejemplos rápidos</div>
+  <div class="preset-row">
+    <button class="pset" onclick="loadCP('obreros')">🏗 Obreros / días / producción</button>
+    <button class="pset" onclick="loadCP('velocidad')">🚗 Velocidad / tiempo</button>
+    <button class="pset" onclick="loadCP('canillas')">🚿 Canillas / horas / litros</button>
+    <button class="pset" onclick="loadCP('campo')">🌾 Hectáreas / lluvia / cosecha</button>
+    <button class="pset" onclick="loadCP('maquinas')">⚙ Máquinas / turnos / piezas</button>
+  </div>
+
+  <div class="slabel">Variables y proporciones</div>
+  <div class="card">
+    <div style="overflow-x:auto">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="width:170px">Variable</th>
+            <th style="width:140px">Valor A <span style="opacity:.6;font-weight:300">(situación conocida)</span></th>
+            <th style="width:140px">Valor B <span style="opacity:.6;font-weight:300">(situación nueva)</span></th>
+            <th style="width:120px">Tipo</th>
+            <th style="width:32px"></th>
+          </tr>
+        </thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+    </div>
+    <div style="padding:12px 18px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-blue" onclick="addCRow()">+ Variable</button>
+      <button class="btn btn-red" onclick="clearComp()">↺ Limpiar</button>
+      <div class="prop-note" style="margin-left:auto">
+        <span><span class="dot dot-d"></span>DIRECTA: más B → X sube</span>
+        <span><span class="dot dot-i"></span>INVERSA: más B → X baja</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Valor base y resultado buscado</div>
+  <div class="card">
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-bottom:6px">Nombre del resultado (X)</div>
+          <input type="text" id="c-xname" placeholder="Ej: Ladrillos producidos" oninput="calcComp()">
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-bottom:6px">Valor base (resultado en situación A)</div>
+          <input type="number" id="c-base" step="any" placeholder="Ej: 120" oninput="calcComp()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="comp-result" style="display:none">
+    <div class="result-box">
+      <div class="r-label">Resultado — <span id="c-rlabel">X</span></div>
+      <div class="r-val" id="c-rval">—</div>
+      <div class="r-formula" id="c-rformula"></div>
+      <div class="r-explain" id="c-rexplain"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════
+     TAB 2: CONVERSIÓN PROPORCIONAL
+═══════════════════════════════ -->
+<div class="page" id="page-multi">
+
+  <div class="info-box">
+    Definís que <strong>1 unidad del primer parámetro</strong> equivale a N unidades de los demás.
+    Luego ingresás cualquier valor en cualquier parámetro y obtenés todos los equivalentes automáticamente.<br>
+    <em style="color:var(--ink-light)">Ej: 1 Tonelada = 1000 USD Divisa = 1030 USD Billete → ¿cuántos USD son 350 kg?</em>
+  </div>
+
+  <div class="slabel">Ejemplos rápidos</div>
+  <div class="preset-row">
+    <button class="pset" onclick="loadMP('granos')">🌾 Granos (ton / div / billete / kg)</button>
+    <button class="pset" onclick="loadMP('obra')">🏗 Obra (m² / horas / materiales)</button>
+    <button class="pset" onclick="loadMP('combustible')">⛽ Combustible (L / km / $)</button>
+    <button class="pset" onclick="loadMP('cambio')">💱 Divisas (USD / EUR / ARS)</button>
+  </div>
+
+  <div class="slabel">Equivalencias (relativas a 1 del primer parámetro)</div>
+  <div class="card">
+    <div id="m-params"></div>
+    <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-blue" onclick="addMP()">+ Parámetro</button>
+      <button class="btn btn-red" onclick="clearMP()">↺ Limpiar</button>
+      <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink-light);letter-spacing:1px">El primer parámetro siempre es la base (= 1)</span>
+    </div>
+  </div>
+
+  <div class="slabel">Calcular</div>
+  <div class="card">
+    <div class="card-body">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-bottom:10px">Ingresar valor en</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="m-pills"></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <input type="number" id="m-input" step="any" placeholder="0" oninput="calcMP()" style="width:180px;font-size:22px;padding:12px 16px">
+        <div style="font-family:var(--mono);font-size:13px;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-border);padding:9px 16px" id="m-tag">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mgrid" id="m-results">
+    <div class="empty">Completá los parámetros para ver resultados</div>
+  </div>
+
+</div>
+</main>
+
+<script>
+// ── helpers ──
+function showTab(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  document.getElementById('tab-'+n).classList.add('active');
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(n){
+  if(n===null||n===undefined||isNaN(n)||!isFinite(n))return'—';
+  if(n===0)return'0';
+  if(Math.abs(n)>=1e12||(Math.abs(n)<1e-5&&Math.abs(n)>0))return n.toExponential(4);
+  return parseFloat(n.toPrecision(10)).toLocaleString('es-AR',{maximumFractionDigits:6});
+}
+
+// ══════════════════════════════════════════
+// TAB 1 — REGLA DE TRES COMPUESTA
+// ══════════════════════════════════════════
+let cRows=[], cId=0;
+
+function addCRow(name='',a='',b='',prop='d'){
+  cRows.push({id:cId++,name,a,b,prop});
+  renderCTable();
+}
+function removeCRow(id){
+  if(cRows.length<=1)return;
+  cRows=cRows.filter(r=>r.id!==id);
+  renderCTable();
+}
+function updateC(id,f,v){
+  const r=cRows.find(r=>r.id===id);
+  if(r)r[f]=v;
+  calcComp();
+}
+function toggleProp(id){
+  const r=cRows.find(r=>r.id===id);
+  if(r)r.prop=r.prop==='d'?'i':'d';
+  renderCTable();
+}
+function clearComp(){
+  cRows=[];cId=0;
+  document.getElementById('c-base').value='';
+  document.getElementById('c-xname').value='';
+  document.getElementById('comp-result').style.display='none';
+  addCRow();addCRow();
+}
+function renderCTable(){
+  document.getElementById('comp-body').innerHTML=cRows.map(r=>`
+    <tr>
+      <td><input type="text" placeholder="Ej: Obreros" value="${esc(r.name)}" oninput="updateC(${r.id},'name',this.value)"></td>
+      <td><input type="number" step="any" placeholder="Valor A" value="${esc(r.a)}" oninput="updateC(${r.id},'a',this.value)"></td>
+      <td><input type="number" step="any" placeholder="Valor B" value="${esc(r.b)}" oninput="updateC(${r.id},'b',this.value)"></td>
+      <td>
+        <div class="di-toggle">
+          <button class="di-btn ${r.prop==='d'?'sel-d':''}" onclick="(()=>{const row=cRows.find(r=>r.id===${r.id});if(row){row.prop='d';renderCTable();}})()">DIRECTA</button>
+          <button class="di-btn ${r.prop==='i'?'sel-i':''}" onclick="(()=>{const row=cRows.find(r=>r.id===${r.id});if(row){row.prop='i';renderCTable();}})()">INVERSA</button>
+        </div>
+      </td>
+      <td><button class="del-btn" onclick="removeCRow(${r.id})">✕</button></td>
+    </tr>
+  `).join('');
+  calcComp();
+}
+function calcComp(){
+  const base=parseFloat(document.getElementById('c-base').value);
+  const xname=document.getElementById('c-xname').value.trim()||'X';
+  const resDiv=document.getElementById('comp-result');
+  const ok=!isNaN(base)&&cRows.length>=1&&cRows.every(r=>r.a!==''&&r.b!==''&&!isNaN(parseFloat(r.a))&&!isNaN(parseFloat(r.b)));
+  if(!ok){resDiv.style.display='none';return;}
+  let prod=base, parts=[fmt(base)], explain=[];
+  for(const r of cRows){
+    const a=parseFloat(r.a),b=parseFloat(r.b);
+    if(r.prop==='d'){prod*=b/a;parts.push(`× (${fmt(b)} / ${fmt(a)})`);explain.push(`${r.name||'var'}: directa`);}
+    else{prod*=a/b;parts.push(`× (${fmt(a)} / ${fmt(b)})`);explain.push(`${r.name||'var'}: inversa`);}
+  }
+  document.getElementById('c-rlabel').textContent=xname;
+  document.getElementById('c-rval').textContent=fmt(prod);
+  document.getElementById('c-rformula').textContent='X = '+parts.join(' ') + ' = ' + fmt(prod);
+  document.getElementById('c-rexplain').textContent=explain.join('  ·  ');
+  resDiv.style.display='block';
+}
+
+const CP={
+  obreros:{rows:[{name:'Obreros',a:'6',b:'9',prop:'d'},{name:'Días',a:'4',b:'3',prop:'i'}],base:'120',xn:'Ladrillos producidos'},
+  velocidad:{rows:[{name:'Velocidad km/h',a:'80',b:'100',prop:'i'}],base:'4',xn:'Horas de viaje'},
+  canillas:{rows:[{name:'Canillas',a:'3',b:'5',prop:'d'},{name:'Horas',a:'6',b:'4',prop:'d'}],base:'900',xn:'Litros llenados'},
+  campo:{rows:[{name:'Hectáreas',a:'50',b:'80',prop:'d'},{name:'Lluvia mm',a:'400',b:'350',prop:'d'}],base:'180',xn:'Toneladas cosechadas'},
+  maquinas:{rows:[{name:'Máquinas',a:'4',b:'6',prop:'d'},{name:'Turnos/día',a:'2',b:'3',prop:'d'},{name:'Días',a:'10',b:'7',prop:'i'}],base:'800',xn:'Piezas producidas'},
+};
+function loadCP(k){
+  const p=CP[k];if(!p)return;
+  cRows=[];cId=0;
+  p.rows.forEach(r=>cRows.push({id:cId++,...r}));
+  document.getElementById('c-base').value=p.base;
+  document.getElementById('c-xname').value=p.xn;
+  renderCTable();
+}
+
+// ══════════════════════════════════════════
+// TAB 2 — CONVERSIÓN PROPORCIONAL
+// ══════════════════════════════════════════
+let mP=[],mId=0,mAct=0;
+
+function addMP(name='',value=''){
+  mP.push({id:mId++,name,value});
+  renderMP();renderMPills();calcMP();
+}
+function removeMP(id){
+  if(mP.length<=2)return;
+  mP=mP.filter(p=>p.id!==id);
+  if(mAct>=mP.length)mAct=0;
+  renderMP();renderMPills();calcMP();
+}
+function updateMP(id,f,v){
+  const p=mP.find(p=>p.id===id);if(p)p[f]=v;
+  if(f==='name')renderMPills();
+  calcMP();
+}
+function clearMP(){
+  mP=[];mId=0;mAct=0;
+  document.getElementById('m-input').value='';
+  addMP('','');addMP('','');
+}
+function renderMP(){
+  document.getElementById('m-params').innerHTML=mP.map((p,i)=>`
+    <div class="param-row">
+      <span class="pnum">${i+1}</span>
+      <input type="text" placeholder="${i===0?'Ej: Toneladas':i===1?'Ej: USD Divisa':'Ej: Parámetro'}" value="${esc(p.name)}" oninput="updateMP(${p.id},'name',this.value)">
+      <span style="font-family:var(--mono);font-size:13px;color:var(--ink-light);text-align:center">=</span>
+      <input type="number" class="pval" step="any" placeholder="${i===0?'1 (base)':'valor equiv.'}" value="${p.value}" ${i===0?'disabled style="opacity:.4;cursor:not-allowed"':''} oninput="updateMP(${p.id},'value',this.value)">
+      <button class="pdel" onclick="removeMP(${p.id})">✕</button>
+    </div>
+  `).join('');
+  if(mP.length>0)mP[0].value='1';
+}
+function renderMPills(){
+  document.getElementById('m-pills').innerHTML=mP.map((p,i)=>`
+    <button class="pill ${i===mAct?'active':''}" onclick="setMA(${i})">${p.name||`Param ${i+1}`}</button>
+  `).join('');
+  document.getElementById('m-tag').textContent=mP[mAct]?(mP[mAct].name||`Param ${mAct+1}`):'—';
+}
+function setMA(i){mAct=i;renderMPills();calcMP();}
+function calcMP(){
+  const raw=parseFloat(document.getElementById('m-input').value);
+  const grid=document.getElementById('m-results');
+  const ok=mP.length>=2&&mP.every(p=>p.name.trim()!=='')&&mP.slice(1).every(p=>p.value!==''&&!isNaN(parseFloat(p.value)));
+  if(!ok||isNaN(raw)){grid.innerHTML='<div class="empty">Completá nombres y valores para ver resultados</div>';return;}
+  const F=mP.map(p=>parseFloat(p.value)||1);
+  const inBase=raw/F[mAct];
+  const cards=mP.map((p,i)=>{
+    if(i===mAct)return null;
+    const val=inBase*F[i];
+    return `<div class="mcard">
+      <div class="mc-label">${esc(p.name)}</div>
+      <div class="mc-val">${fmt(val)}</div>
+      <div class="mc-unit">${esc(p.name)}</div>
+      <div class="mc-formula">${fmt(raw)} ${esc(mP[mAct].name||'—')} → ${fmt(val)} ${esc(p.name)}</div>
+    </div>`;
+  }).filter(Boolean).join('');
+  grid.innerHTML=cards||'<div class="empty">Sin resultados</div>';
+}
+
+const MP={
+  granos:[{name:'Tonelada',value:'1'},{name:'USD Divisa',value:'1000'},{name:'USD Billete',value:'1030'},{name:'Kilogramo',value:'1000'}],
+  obra:[{name:'Metro²',value:'1'},{name:'Horas trabajo',value:'8'},{name:'Materiales $',value:'15000'}],
+  combustible:[{name:'Litros',value:'1'},{name:'Kilómetros',value:'12'},{name:'Pesos $',value:'1350'}],
+  cambio:[{name:'USD',value:'1'},{name:'EUR',value:'0.92'},{name:'ARS oficial',value:'1050'},{name:'ARS blue',value:'1380'}],
+};
+function loadMP(k){
+  const p=MP[k];if(!p)return;
+  mP=p.map((x,i)=>({id:mId++,name:x.name,value:i===0?'1':x.value}));
+  mAct=0;
+  document.getElementById('m-input').value='';
+  renderMP();renderMPills();calcMP();
+}
+
+// INIT
+loadCP('obreros');
+loadMP('granos');
+</script>
+</body>
+</html>
