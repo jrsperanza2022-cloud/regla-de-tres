@@ -3,333 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CALCULADORA PROPORCIONAL</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>Regla de Tres</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0c0d11;
-  --s1: #13141a;
-  --s2: #1a1c24;
-  --s3: #22242f;
-  --ink: #e4e2f0;
-  --mid: #7a788f;
-  --dim: #3a3850;
-  --gold: #f0b040;
-  --gold-bg: rgba(240,176,64,0.09);
-  --gold-br: rgba(240,176,64,0.28);
-  --blue: #5b8ef5;
-  --blue-bg: rgba(91,142,245,0.09);
-  --blue-br: rgba(91,142,245,0.28);
-  --green: #34d07a;
-  --green-bg: rgba(52,208,122,0.08);
-  --green-br: rgba(52,208,122,0.28);
-  --red: #e05050;
-  --red-bg: rgba(224,80,80,0.09);
-  --red-br: rgba(224,80,80,0.28);
-  --br: #23253080;
-  --mono: 'DM Mono', monospace;
-  --sans: 'Syne', sans-serif;
-  --sh: 0 4px 24px rgba(0,0,0,.5);
+:root{
+  --bg:#0c0d12;--s1:#13141c;--s2:#1b1d27;--s3:#22253200;
+  --ink:#e2e0f0;--mid:#7876a0;--dim:#38364e;
+  --gold:#f0b040;--gbg:rgba(240,176,64,.09);--gbr:rgba(240,176,64,.3);
+  --blue:#5b8ef5;--bbg:rgba(91,142,245,.09);--bbr:rgba(91,142,245,.3);
+  --green:#34d07a;--grbg:rgba(52,208,122,.08);--grbr:rgba(52,208,122,.3);
+  --red:#e05050;--rbg:rgba(224,80,80,.09);--rbr:rgba(224,80,80,.3);
+  --br:#1e2030;--sh:0 4px 28px rgba(0,0,0,.5);
+  --mono:'DM Mono',monospace;--sans:'Syne',sans-serif;
 }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--ink); font-family:var(--sans); min-height:100vh; }
+header{background:var(--s1);border-bottom:1px solid var(--br);padding:18px 32px;display:flex;align-items:center;gap:14px;}
+.logo{width:34px;height:34px;border:1.5px solid var(--gold);display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:var(--gold);flex-shrink:0;}
+header h1{font-size:17px;font-weight:800;letter-spacing:.5px;}
+.htag{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:2px;}
 
-/* ── HEADER ── */
-header {
-  background: var(--s1);
-  border-bottom: 1px solid var(--br);
-  padding: 20px 36px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.logo {
-  width: 36px; height: 36px;
-  border: 1.5px solid var(--gold);
-  display: grid; place-items: center;
-  font-family: var(--mono); font-size: 11px;
-  color: var(--gold); flex-shrink: 0;
-}
-header h1 { font-size: 18px; font-weight: 800; letter-spacing: .5px; }
-.hbadge {
-  margin-left: auto;
-  font-family: var(--mono); font-size: 10px;
-  color: var(--dim); letter-spacing: 2px;
-}
+/* TABS */
+.tabs{display:flex;background:var(--s1);border-bottom:2px solid var(--br);padding:0 32px;}
+.tab{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:13px 20px 14px;cursor:pointer;border:none;background:transparent;color:var(--dim);border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .13s,border-color .13s;}
+.tab:hover{color:var(--mid);}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
 
-main { max-width: 820px; margin: 0 auto; padding: 36px 20px 60px; }
+main{max-width:780px;margin:0 auto;padding:36px 20px 60px;}
+.page{display:none;}
+.page.on{display:block;}
 
-/* ── INSTRUCCIÓN ── */
-.intro {
-  background: var(--s1);
-  border: 1px solid var(--br);
-  border-left: 3px solid var(--gold);
-  padding: 16px 20px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--mid);
-  line-height: 1.9;
-  letter-spacing: .4px;
-  margin-bottom: 28px;
-}
-.intro strong { color: var(--gold); }
-.intro em { color: var(--dim); font-style: normal; }
+/* SECTION LABEL */
+.sl{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.sl::after{content:'';flex:1;height:1px;background:var(--br);}
 
-/* ── SECTION LABEL ── */
-.sl {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 3px; color: var(--dim);
-  text-transform: uppercase; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 10px;
-}
-.sl::after { content:''; flex:1; height:1px; background: var(--br); }
+/* CARD */
+.card{background:var(--s1);border:1px solid var(--br);box-shadow:var(--sh);margin-bottom:22px;}
+.chead{padding:13px 20px;border-bottom:1px solid var(--br);background:var(--s2);font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--mid);text-transform:uppercase;}
+.cbody{padding:24px;}
 
-/* ── CARD ── */
-.card {
-  background: var(--s1);
-  border: 1px solid var(--br);
-  box-shadow: var(--sh);
-  margin-bottom: 20px;
+/* ══════════════════════
+   REGLA DE TRES SIMPLE
+══════════════════════ */
+.r3-grid{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  grid-template-rows:auto auto auto;
+  gap:0;
+  border:1px solid var(--br);
 }
+.r3-cell{
+  padding:20px;
+  border-right:1px solid var(--br);
+  border-bottom:1px solid var(--br);
+  position:relative;
+}
+.r3-cell:nth-child(2){border-right:none;}
+.r3-cell:nth-child(3){border-right:none;}
+.r3-cell:nth-child(5){border-right:none;border-bottom:none;background:var(--gbg);border:1px solid var(--gbr);}
+.r3-cell:nth-child(4){border-bottom:none;}
+.r3-cell:nth-child(6){display:none;}
 
-/* ── PARÁMETROS ── */
-.param-list { padding: 8px 0; }
+.r3-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;}
+.r3-name{
+  width:100%;background:var(--s2);border:1px solid var(--br);
+  font-family:var(--sans);font-size:13px;font-weight:700;color:var(--mid);
+  padding:7px 10px;outline:none;margin-bottom:10px;
+  transition:border-color .15s;
+}
+.r3-name:focus{border-color:var(--gold);}
+.r3-name::placeholder{color:var(--dim);font-weight:400;}
 
-.param-item {
-  display: grid;
-  grid-template-columns: 32px 1fr 180px 36px;
-  align-items: center;
-  border-bottom: 1px solid var(--br);
-  transition: background .13s;
+.r3-num{
+  width:100%;background:var(--bg);border:1px solid var(--br);
+  font-family:var(--mono);font-size:22px;color:var(--ink);
+  padding:10px 12px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+  -moz-appearance:textfield;
 }
-.param-item:last-child { border-bottom: none; }
-.param-item:hover { background: var(--s2); }
+.r3-num::-webkit-outer-spin-button,.r3-num::-webkit-inner-spin-button{-webkit-appearance:none;}
+.r3-num:focus{border-color:var(--gold);box-shadow:0 0 0 2px var(--gbg);}
+.r3-num::placeholder{color:var(--dim);}
+.r3-num:disabled{color:var(--green);font-size:26px;cursor:not-allowed;background:var(--grbg);border-color:var(--grbr);}
 
-.pn {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--dim); text-align: center;
-  user-select: none;
+.r3-mid{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:16px 12px;border-right:1px solid var(--br);border-bottom:1px solid var(--br);
+  gap:8px;
 }
+.r3-eq{font-family:var(--mono);font-size:18px;color:var(--dim);}
 
-.pname-input {
-  border: none; background: transparent;
-  font-family: var(--sans); font-size: 14px;
-  font-weight: 700; color: var(--ink);
-  padding: 15px 12px; outline: none; width: 100%;
+.r3-sep{
+  grid-column:1/-1;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--br);border-right:none;
+  padding:8px 20px;gap:12px;
+  background:var(--s2);
 }
-.pname-input::placeholder { color: var(--dim); font-weight: 400; }
-.pname-input:focus { background: rgba(240,176,64,.04); }
+.r3-sep span{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--dim);}
+.r3-line{flex:1;height:1px;background:var(--br);}
 
-.pval-input {
-  border: none; background: transparent;
-  font-family: var(--mono); font-size: 16px;
-  color: var(--gold); padding: 15px 14px;
-  outline: none; width: 100%; text-align: right;
-  -moz-appearance: textfield;
+.unknown-sel{
+  display:flex;gap:0;border:1px solid var(--br);overflow:hidden;margin-top:14px;
 }
-.pval-input::-webkit-outer-spin-button,
-.pval-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.pval-input::placeholder { color: var(--dim); }
-.pval-input:focus { background: var(--gold-bg); }
+.us-btn{
+  flex:1;font-family:var(--mono);font-size:10px;letter-spacing:1px;
+  padding:7px 4px;cursor:pointer;border:none;
+  background:var(--s2);color:var(--dim);transition:all .13s;text-align:center;
+}
+.us-btn.sel{background:var(--gold);color:#000;}
+.us-btn:hover:not(.sel){color:var(--mid);}
 
-.pdel {
-  background: none; border: none; cursor: pointer;
-  color: var(--dim); font-size: 13px;
-  display: flex; align-items: center; justify-content: center;
-  height: 100%; opacity: 0; transition: color .13s, opacity .13s;
-  padding: 0 10px;
+.r3-result-box{
+  margin-top:20px;background:var(--grbg);border:1px solid var(--grbr);
+  padding:20px 22px;animation:pop .2s ease;
 }
-.param-item:hover .pdel { opacity: 1; }
-.pdel:hover { color: var(--red); }
+.rbox-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
+.rbox-val{font-family:var(--mono);font-size:40px;color:var(--green);letter-spacing:-1px;line-height:1;margin-bottom:10px;}
+.rbox-formula{font-family:var(--mono);font-size:11px;color:var(--mid);padding-top:10px;border-top:1px solid var(--grbr);}
 
-/* ── FOOTER DE CARD ── */
-.card-foot {
-  padding: 11px 16px;
-  border-top: 1px solid var(--br);
-  background: var(--s2);
-  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-/* ── BOTONES ── */
-.btn {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px;
-  text-transform: uppercase; padding: 8px 16px;
-  cursor: pointer; border: 1px solid; transition: all .13s;
+/* ══════════════════════
+   TRIPLE VINCULADA
+══════════════════════ */
+.tv-setup{
+  display:grid;gap:0;
+  border:1px solid var(--br);
 }
-.btn-gold { background: var(--gold-bg); color: var(--gold); border-color: var(--gold-br); }
-.btn-gold:hover { background: rgba(240,176,64,.18); }
-.btn-blue { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-br); }
-.btn-blue:hover { background: rgba(91,142,245,.18); }
-.btn-red { background: var(--red-bg); color: var(--red); border-color: var(--red-br); }
-.btn-red:hover { background: rgba(224,80,80,.18); }
+.tv-row{
+  display:grid;
+  grid-template-columns:32px 1fr 1fr;
+  border-bottom:1px solid var(--br);
+  align-items:stretch;
+}
+.tv-row:last-child{border-bottom:none;}
+.tv-row:hover{background:rgba(255,255,255,.01);}
+.tv-num{font-family:var(--mono);font-size:10px;color:var(--dim);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--br);}
+.tv-input{
+  border:none;background:transparent;
+  font-family:var(--mono);font-size:14px;color:var(--ink);
+  padding:14px 14px;outline:none;width:100%;
+  border-right:1px solid var(--br);
+}
+.tv-input:focus{background:var(--gbg);}
+.tv-input::placeholder{color:var(--dim);}
+.tv-input.name-col{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--mid);}
+.tv-input.name-col::placeholder{font-weight:400;}
+.tv-input.val-col{color:var(--gold);text-align:right;font-size:16px;}
+.tv-input.val-col:last-child{border-right:none;}
 
-/* ── CALCULAR ── */
-.calc-wrap {
-  background: var(--s1);
-  border: 1px solid var(--br);
-  box-shadow: var(--sh);
+.tv-thead{
+  display:grid;grid-template-columns:32px 1fr 1fr;
+  background:var(--s2);border-bottom:1px solid var(--br);
 }
+.tv-th{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;padding:9px 14px;border-right:1px solid var(--br);}
+.tv-th:first-child{display:flex;align-items:center;justify-content:center;}
+.tv-th:last-child{border-right:none;}
 
-.calc-header {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--br);
-  background: var(--s2);
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 3px; color: var(--mid); text-transform: uppercase;
+/* QUERY */
+.query-tabs{display:flex;gap:0;border:1px solid var(--br);overflow:hidden;margin-bottom:16px;}
+.qtab{
+  flex:1;font-family:var(--mono);font-size:11px;letter-spacing:1px;
+  padding:10px 8px;cursor:pointer;border:none;
+  background:var(--s2);color:var(--dim);transition:all .13s;
+  border-right:1px solid var(--br);text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+.qtab:last-child{border-right:none;}
+.qtab.on{background:var(--gold);color:#000;font-weight:500;}
+.qtab:hover:not(.on){color:var(--mid);}
 
-/* tabs within calc */
-.ctabs {
-  display: flex; border-bottom: 1px solid var(--br);
-  overflow-x: auto;
+.query-input-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.q-input{
+  background:var(--s2);border:1px solid var(--br);
+  font-family:var(--mono);font-size:26px;color:var(--ink);
+  padding:12px 16px;outline:none;width:220px;
+  -moz-appearance:textfield;transition:border-color .15s,box-shadow .15s;
 }
-.ctab {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
-  padding: 11px 20px; cursor: pointer; border: none;
-  background: transparent; color: var(--dim);
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-  transition: color .13s, border-color .13s; white-space: nowrap;
-  flex-shrink: 0;
-}
-.ctab:hover { color: var(--mid); }
-.ctab.act { color: var(--gold); border-bottom-color: var(--gold); }
+.q-input::-webkit-outer-spin-button,.q-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.q-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px var(--gbg);}
+.q-input::placeholder{color:var(--dim);}
+.q-badge{font-family:var(--mono);font-size:12px;color:var(--gold);background:var(--gbg);border:1px solid var(--gbr);padding:9px 16px;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;}
 
-.calc-body { padding: 24px; }
+.tv-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:18px;}
+.tv-rcard{background:var(--s2);border:1px solid var(--grbr);padding:18px 20px;position:relative;overflow:hidden;animation:pop .2s ease;}
+.tv-rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent 70%);}
+.tv-rc-lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
+.tv-rc-val{font-family:var(--mono);font-size:28px;color:var(--green);letter-spacing:-1px;line-height:1;margin-bottom:4px;word-break:break-all;}
+.tv-rc-name{font-family:var(--sans);font-size:12px;font-weight:700;color:var(--mid);margin-bottom:8px;}
+.tv-rc-how{font-family:var(--mono);font-size:9px;color:var(--dim);padding-top:8px;border-top:1px solid var(--br);}
 
-.cinput-row {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-}
+.tv-empty{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:2px;padding:24px 0;grid-column:1/-1;}
 
-.cinput-label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
-  color: var(--mid); text-transform: uppercase; margin-bottom: 6px;
-}
+/* BUTTONS */
+.btn{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;cursor:pointer;border:1px solid;transition:all .13s;}
+.btn-gold{background:var(--gbg);color:var(--gold);border-color:var(--gbr);}
+.btn-gold:hover{background:rgba(240,176,64,.18);}
+.btn-red{background:var(--rbg);color:var(--red);border-color:var(--rbr);}
+.btn-red:hover{background:rgba(224,80,80,.18);}
 
-.big-input {
-  background: var(--s2); border: 1px solid var(--br);
-  font-family: var(--mono); font-size: 26px; color: var(--ink);
-  padding: 12px 18px; outline: none; width: 260px;
-  -moz-appearance: textfield; transition: border-color .18s, box-shadow .18s;
-}
-.big-input::-webkit-outer-spin-button,
-.big-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-.big-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 2px var(--gold-bg);
-}
-.big-input::placeholder { color: var(--dim); }
+.foot{padding:11px 16px;border-top:1px solid var(--br);background:var(--s2);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 
-.unit-badge {
-  font-family: var(--mono); font-size: 12px;
-  color: var(--gold); background: var(--gold-bg);
-  border: 1px solid var(--gold-br); padding: 8px 16px;
-  white-space: nowrap; max-width: 220px; overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* HISTORIAL */
+.hist{margin-top:24px;background:var(--s1);border:1px solid var(--br);}
+.hist-h{padding:10px 18px;background:var(--s2);border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--mid);text-transform:uppercase;}
+.hclear{background:none;border:none;font-family:var(--mono);font-size:10px;color:var(--dim);cursor:pointer;letter-spacing:1px;transition:color .13s;}
+.hclear:hover{color:var(--red);}
+.hrow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid var(--br);font-family:var(--mono);font-size:11px;}
+.hrow:last-child{border-bottom:none;}
+.hfrom{padding:9px 14px;color:var(--gold);border-right:1px solid var(--br);white-space:nowrap;background:rgba(240,176,64,.03);}
+.hto{padding:9px 14px;color:var(--mid);}
 
-/* ── RESULTADOS ── */
-.results {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 14px; margin-top: 24px;
-}
-
-.rcard {
-  background: var(--s2);
-  border: 1px solid var(--green-br);
-  padding: 20px 22px;
-  position: relative; overflow: hidden;
-  animation: pop .22s ease;
-}
-.rcard::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--green), transparent 80%);
-}
-
-@keyframes pop {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
-}
-
-.rc-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 2px; color: var(--green);
-  text-transform: uppercase; margin-bottom: 10px;
-}
-.rc-val {
-  font-family: var(--mono); font-size: 28px;
-  color: var(--green); letter-spacing: -1px;
-  line-height: 1; margin-bottom: 6px;
-  word-break: break-all;
-}
-.rc-name {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 700; color: var(--mid);
-}
-.rc-ratio {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--dim); margin-top: 10px;
-  padding-top: 10px; border-top: 1px solid var(--br);
-  letter-spacing: .3px;
-}
-
-.empty-msg {
-  grid-column: 1/-1; text-align: center;
-  padding: 32px; font-family: var(--mono);
-  font-size: 11px; color: var(--dim); letter-spacing: 2px;
-}
-
-/* ── HISTORIAL ── */
-.hist-wrap {
-  margin-top: 28px;
-  background: var(--s1);
-  border: 1px solid var(--br);
-}
-.hist-head {
-  padding: 10px 18px;
-  background: var(--s2);
-  border-bottom: 1px solid var(--br);
-  display: flex; align-items: center; justify-content: space-between;
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 3px; color: var(--mid); text-transform: uppercase;
-}
-.hist-clear {
-  background: none; border: none;
-  font-family: var(--mono); font-size: 10px;
-  color: var(--dim); cursor: pointer; letter-spacing: 1px;
-  transition: color .13s;
-}
-.hist-clear:hover { color: var(--red); }
-.hist-row {
-  display: grid; grid-template-columns: auto 1fr;
-  border-bottom: 1px solid var(--br);
-  font-family: var(--mono); font-size: 12px;
-}
-.hist-row:last-child { border-bottom: none; }
-.hist-from {
-  padding: 10px 16px; color: var(--gold);
-  border-right: 1px solid var(--br);
-  white-space: nowrap; background: rgba(240,176,64,.03);
-}
-.hist-to { padding: 10px 16px; color: var(--mid); }
-
-/* ── PRESETS ── */
-.presets { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-.pset {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
-  color: var(--mid); background: var(--s1);
-  border: 1px solid var(--br); padding: 6px 14px;
-  cursor: pointer; border-radius: 2px; transition: all .13s;
-}
-.pset:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
-
-@media(max-width:580px){
-  header { padding: 16px 16px; }
-  main { padding: 20px 12px 40px; }
-  .param-item { grid-template-columns: 28px 1fr 130px 32px; }
-  .big-input { width: 180px; font-size: 20px; }
+@media(max-width:540px){
+  header{padding:14px 16px;}
+  .tabs{padding:0 16px;}
+  main{padding:20px 12px 40px;}
+  .q-input{width:160px;font-size:20px;}
 }
 </style>
 </head>
@@ -337,299 +228,307 @@ main { max-width: 820px; margin: 0 auto; padding: 36px 20px 60px; }
 
 <header>
   <div class="logo">∝</div>
-  <h1>CALCULADORA PROPORCIONAL</h1>
-  <span class="hbadge">REGLA DE TRES MÚLTIPLE</span>
+  <h1>REGLA DE TRES</h1>
+  <span class="htag">Simple · Triple</span>
 </header>
+
+<div class="tabs">
+  <button class="tab on"  onclick="showTab('simple')" id="tab-simple">Simple</button>
+  <button class="tab"     onclick="showTab('triple')" id="tab-triple">Triple vinculada</button>
+</div>
 
 <main>
 
-  <div class="intro">
-    <strong>Paso 1:</strong> Ingresá los valores reales de una situación concreta — todos vinculados entre sí.<br>
-    <strong>Paso 2:</strong> Seleccioná desde qué parámetro querés calcular, ingresá un nuevo valor y obtené los equivalentes en todos los demás.<br>
-    <em>Ej: $40.000.000 ARS = 28.000 USD billete = 27,86 toneladas → si tengo 15.000 USD ¿cuántos pesos son? ¿cuántas toneladas?</em>
-  </div>
-
-  <!-- PRESETS -->
-  <div class="sl">Cargar ejemplo</div>
-  <div class="presets">
-    <button class="pset" onclick="loadP('granos')">🌾 Pesos / USD / Toneladas</button>
-    <button class="pset" onclick="loadP('obra')">🏗 Presupuesto / m² / días</button>
-    <button class="pset" onclick="loadP('combustible')">⛽ Litros / km / pesos</button>
-    <button class="pset" onclick="loadP('cambio')">💱 ARS / USD / EUR</button>
-  </div>
-
-  <!-- PASO 1: DEFINIR VALORES BASE -->
-  <div class="sl">Paso 1 — Definir los valores vinculados</div>
+<!-- ═══════════════════════════════════
+     TAB 1 — REGLA DE TRES SIMPLE
+═══════════════════════════════════ -->
+<div class="page on" id="page-simple">
 
   <div class="card">
-    <div class="param-list" id="param-list"></div>
-    <div class="card-foot">
-      <button class="btn btn-gold" onclick="addParam()">+ Agregar parámetro</button>
-      <button class="btn btn-red" onclick="resetAll()">↺ Limpiar todo</button>
-      <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:1px">Mín. 2 parámetros</span>
-    </div>
-  </div>
+    <div class="chead">Ingresá los tres valores conocidos — el cuarto se calcula solo</div>
+    <div class="cbody">
 
-  <!-- PASO 2: CALCULAR -->
-  <div class="sl">Paso 2 — Calcular</div>
-
-  <div class="calc-wrap">
-    <div class="calc-header">Seleccioná el parámetro de entrada</div>
-    <div class="ctabs" id="ctabs"></div>
-    <div class="calc-body">
-      <div class="cinput-label">Ingresá el nuevo valor</div>
-      <div class="cinput-row">
-        <input type="number" class="big-input" id="main-input"
-          step="any" placeholder="0"
-          oninput="calculate()">
-        <div class="unit-badge" id="unit-badge">—</div>
+      <!-- NOMBRES OPCIONALES -->
+      <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:8px;margin-bottom:18px;">
+        <input class="r3-name" type="text" id="s-name-a" placeholder="Nombre (opcional)" oninput="calcSimple()">
+        <div></div>
+        <input class="r3-name" type="text" id="s-name-b" placeholder="Nombre (opcional)" oninput="calcSimple()">
       </div>
-      <div class="results" id="results">
-        <div class="empty-msg">Completá los parámetros del Paso 1 para calcular</div>
+
+      <!-- GRILLA PROPORCIONAL -->
+      <div style="display:grid;grid-template-columns:1fr 40px 1fr;border:1px solid var(--br);">
+
+        <!-- Fila superior: A | = | B -->
+        <div style="padding:16px;border-right:1px solid var(--br);border-bottom:1px solid var(--br);">
+          <div class="r3-label">A <span style="color:var(--dim);font-size:9px">(dato 1)</span></div>
+          <input class="r3-num" type="number" id="s-a" step="any" placeholder="..." oninput="calcSimple()">
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:center;border-right:1px solid var(--br);border-bottom:1px solid var(--br);font-family:var(--mono);font-size:20px;color:var(--dim);">—</div>
+
+        <div style="padding:16px;border-bottom:1px solid var(--br);">
+          <div class="r3-label">B <span style="color:var(--dim);font-size:9px">(dato 2)</span></div>
+          <input class="r3-num" type="number" id="s-b" step="any" placeholder="..." oninput="calcSimple()">
+        </div>
+
+        <!-- Separador -->
+        <div style="grid-column:1/-1;display:flex;align-items:center;padding:6px 16px;gap:12px;background:var(--s2);border-bottom:1px solid var(--br);">
+          <div style="flex:1;height:1px;background:var(--br)"></div>
+          <span style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim)">COMO</span>
+          <div style="flex:1;height:1px;background:var(--br)"></div>
+        </div>
+
+        <!-- Fila inferior: C | = | X -->
+        <div style="padding:16px;border-right:1px solid var(--br);">
+          <div class="r3-label">C <span style="color:var(--dim);font-size:9px">(dato 3)</span></div>
+          <input class="r3-num" type="number" id="s-c" step="any" placeholder="..." oninput="calcSimple()">
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:center;border-right:1px solid var(--br);font-family:var(--mono);font-size:20px;color:var(--dim);">—</div>
+
+        <div style="padding:16px;background:var(--grbg);border:1px solid var(--grbr);border-top:none;border-left:none;">
+          <div class="r3-label" style="color:var(--green)">X <span style="font-size:9px">(resultado)</span></div>
+          <div style="font-family:var(--mono);font-size:32px;color:var(--green);letter-spacing:-1px;line-height:1;padding-top:10px;" id="s-x">—</div>
+        </div>
+
+      </div>
+
+      <!-- FORMULA -->
+      <div id="s-formula" style="display:none;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--mid);background:var(--s2);border:1px solid var(--br);padding:12px 16px;letter-spacing:.4px;"></div>
+
+    </div>
+  </div>
+
+  <!-- HISTORIAL SIMPLE -->
+  <div class="hist" id="hist-simple" style="display:none">
+    <div class="hist-h">Historial <button class="hclear" onclick="clearHist('simple')">× limpiar</button></div>
+    <div id="hist-simple-body"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════
+     TAB 2 — TRIPLE VINCULADA
+═══════════════════════════════════ -->
+<div class="page" id="page-triple">
+
+  <!-- SETUP -->
+  <div class="sl">Paso 1 — Establecé la relación entre los tres valores</div>
+  <div class="card">
+    <div style="overflow-x:auto">
+      <div class="tv-setup">
+        <div class="tv-thead">
+          <div class="tv-th">#</div>
+          <div class="tv-th">Nombre / concepto</div>
+          <div class="tv-th" style="text-align:right">Valor de referencia</div>
+        </div>
+        <div class="tv-row">
+          <span class="tv-num">1</span>
+          <input class="tv-input name-col" type="text" id="t-n1" placeholder="Ej: pesos, kilos, litros…" oninput="renderQTabs()">
+          <input class="tv-input val-col" type="number" step="any" id="t-v1" placeholder="valor" oninput="calcTriple()">
+        </div>
+        <div class="tv-row">
+          <span class="tv-num">2</span>
+          <input class="tv-input name-col" type="text" id="t-n2" placeholder="Ej: dólares, metros, horas…" oninput="renderQTabs()">
+          <input class="tv-input val-col" type="number" step="any" id="t-v2" placeholder="valor" oninput="calcTriple()">
+        </div>
+        <div class="tv-row">
+          <span class="tv-num">3</span>
+          <input class="tv-input name-col" type="text" id="t-n3" placeholder="Ej: toneladas, km, días…" oninput="renderQTabs()">
+          <input class="tv-input val-col" type="number" step="any" id="t-v3" placeholder="valor" oninput="calcTriple()">
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn btn-red" onclick="clearTriple()">↺ Limpiar</button>
+      <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:1px">Ingresá valores reales de una situación concreta</span>
+    </div>
+  </div>
+
+  <!-- CONSULTA -->
+  <div class="sl">Paso 2 — Consultá desde cualquiera de los tres</div>
+  <div class="card">
+    <div class="chead">¿Desde qué parámetro querés calcular?</div>
+    <div class="cbody">
+      <div class="query-tabs" id="q-tabs">
+        <div class="qtab on" onclick="setQ(0)" id="qt0">1</div>
+        <div class="qtab"    onclick="setQ(1)" id="qt1">2</div>
+        <div class="qtab"    onclick="setQ(2)" id="qt2">3</div>
+      </div>
+      <div class="query-input-row">
+        <input type="number" class="q-input" id="q-input" step="any" placeholder="0" oninput="calcTriple()">
+        <div class="q-badge" id="q-badge">—</div>
+      </div>
+      <div class="tv-results" id="tv-results">
+        <div class="tv-empty">Completá el Paso 1 para calcular</div>
       </div>
     </div>
   </div>
 
-  <!-- HISTORIAL -->
-  <div class="hist-wrap" id="hist-wrap" style="display:none">
-    <div class="hist-head">
-      Historial
-      <button class="hist-clear" onclick="clearHist()">× limpiar</button>
-    </div>
-    <div id="hist-body"></div>
+  <!-- HISTORIAL TRIPLE -->
+  <div class="hist" id="hist-triple" style="display:none">
+    <div class="hist-h">Historial <button class="hclear" onclick="clearHist('triple')">× limpiar</button></div>
+    <div id="hist-triple-body"></div>
   </div>
 
+</div>
 </main>
 
 <script>
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let params = [];   // [{id, name, value}]
-let activeIdx = 0;
-let nextId = 0;
-let history = [];
-
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
+/* ────────────────────────────
+   HELPERS
+──────────────────────────── */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function v(id){return document.getElementById(id);}
 function fmt(n){
-  if(n===null||n===undefined||isNaN(n)||!isFinite(n)) return '—';
-  if(n===0) return '0';
-  if(Math.abs(n)>=1e13||(Math.abs(n)<0.0001&&Math.abs(n)>0)) return n.toExponential(4);
-  // nice thousands separator
+  if(n===null||n===undefined||isNaN(n)||!isFinite(n))return'—';
+  if(n===0)return'0';
+  if(Math.abs(n)>=1e13||(Math.abs(n)<0.00001&&Math.abs(n)>0))return n.toExponential(4);
   return parseFloat(n.toPrecision(10)).toLocaleString('es-AR',{maximumFractionDigits:6});
 }
 
-// ═══════════════════════════════════════════
-// PARAMS
-// ═══════════════════════════════════════════
-function addParam(name='', value=''){
-  params.push({id: nextId++, name, value});
-  render();
+function showTab(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  v('page-'+name).classList.add('on');
+  v('tab-'+name).classList.add('on');
 }
 
-function removeParam(id){
-  if(params.length <= 2) return;
-  const idx = params.findIndex(p=>p.id===id);
-  params = params.filter(p=>p.id!==id);
-  if(activeIdx >= params.length) activeIdx = params.length - 1;
-  render();
+/* ────────────────────────────
+   TAB 1 — SIMPLE
+   A/B = C/X  →  X = (B × C) / A
+──────────────────────────── */
+function calcSimple(){
+  const a=parseFloat(v('s-a').value);
+  const b=parseFloat(v('s-b').value);
+  const c=parseFloat(v('s-c').value);
+  const xEl=v('s-x');
+  const fEl=v('s-formula');
+
+  if(isNaN(a)||isNaN(b)||isNaN(c)||a===0){
+    xEl.textContent='—';
+    fEl.style.display='none';
+    return;
+  }
+  const x=(b*c)/a;
+  xEl.textContent=fmt(x);
+
+  const na=v('s-name-a').value.trim()||'A';
+  const nb=v('s-name-b').value.trim()||'B';
+  fEl.style.display='block';
+  fEl.textContent=`X = (${esc(nb)} × C) / ${esc(na)}  →  X = (${fmt(b)} × ${fmt(c)}) / ${fmt(a)} = ${fmt(x)}`;
+
+  pushHist('simple',`${fmt(c)} → X = ${fmt(x)}`);
 }
 
-function updateName(id, val){
-  const p = params.find(p=>p.id===id);
-  if(p) p.name = val;
-  renderTabs();
-  calculate();
+/* ────────────────────────────
+   TAB 2 — TRIPLE VINCULADA
+──────────────────────────── */
+let qActive=0;
+const histData={simple:[],triple:[]};
+
+function getTripleData(){
+  return[
+    {name:v('t-n1').value.trim(), val:parseFloat(v('t-v1').value)},
+    {name:v('t-n2').value.trim(), val:parseFloat(v('t-v2').value)},
+    {name:v('t-n3').value.trim(), val:parseFloat(v('t-v3').value)},
+  ];
 }
 
-function updateValue(id, val){
-  const p = params.find(p=>p.id===id);
-  if(p) p.value = val;
-  calculate();
+function renderQTabs(){
+  const d=getTripleData();
+  [0,1,2].forEach(i=>{
+    const t=v('qt'+i);
+    t.textContent=d[i].name||`Parámetro ${i+1}`;
+    t.classList.toggle('on',i===qActive);
+  });
+  v('q-badge').textContent=d[qActive].name||`Parámetro ${qActive+1}`;
+  calcTriple();
 }
 
-function resetAll(){
-  params = []; nextId = 0; activeIdx = 0;
-  document.getElementById('main-input').value = '';
-  document.getElementById('results').innerHTML = '<div class="empty-msg">Completá los parámetros del Paso 1 para calcular</div>';
-  addParam('','');
-  addParam('','');
-  addParam('','');
+function setQ(i){
+  qActive=i;
+  renderQTabs();
 }
 
-// ═══════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════
-function render(){
-  renderParams();
-  renderTabs();
-  calculate();
-}
+function calcTriple(){
+  const d=getTripleData();
+  const qVal=parseFloat(v('q-input').value);
+  const res=v('tv-results');
 
-function renderParams(){
-  const list = document.getElementById('param-list');
-  list.innerHTML = params.map((p,i) => `
-    <div class="param-item">
-      <span class="pn">${i+1}</span>
-      <input class="pname-input" type="text"
-        placeholder="Ej: Pesos ARS"
-        value="${esc(p.name)}"
-        oninput="updateName(${p.id}, this.value)">
-      <input class="pval-input" type="number" step="any"
-        placeholder="Valor"
-        value="${esc(p.value)}"
-        oninput="updateValue(${p.id}, this.value)">
-      <button class="pdel" onclick="removeParam(${p.id})" title="Eliminar">✕</button>
-    </div>
-  `).join('');
-}
-
-function renderTabs(){
-  const tabs = document.getElementById('ctabs');
-  tabs.innerHTML = params.map((p,i) => `
-    <button class="ctab ${i===activeIdx?'act':''}" onclick="setActive(${i})">
-      ${p.name ? esc(p.name) : `Param ${i+1}`}
-    </button>
-  `).join('');
-  const badge = document.getElementById('unit-badge');
-  badge.textContent = params[activeIdx]?.name || `Parámetro ${activeIdx+1}`;
-}
-
-function setActive(i){
-  activeIdx = i;
-  renderTabs();
-  calculate();
-}
-
-// ═══════════════════════════════════════════
-// CALCULATE
-// ═══════════════════════════════════════════
-function calculate(){
-  const inputVal = parseFloat(document.getElementById('main-input').value);
-  const grid = document.getElementById('results');
-
-  // validate: need all names filled and all values filled and valid
-  const allNamed  = params.every(p => p.name.trim() !== '');
-  const allValued = params.every(p => p.value !== '' && !isNaN(parseFloat(p.value)) && parseFloat(p.value) !== 0);
-
-  if(!allNamed || !allValued || params.length < 2){
-    grid.innerHTML = '<div class="empty-msg">Completá nombres y valores en el Paso 1</div>';
+  // validate
+  const allOk=d.every(x=>x.name!==''&&!isNaN(x.val)&&x.val!==0);
+  if(!allOk){
+    res.innerHTML='<div class="tv-empty">Completá nombres y valores en el Paso 1</div>';
+    return;
+  }
+  if(isNaN(qVal)){
+    res.innerHTML='<div class="tv-empty">Ingresá un valor en el Paso 2</div>';
     return;
   }
 
-  if(isNaN(inputVal)){
-    grid.innerHTML = '<div class="empty-msg">Ingresá un valor para calcular</div>';
-    return;
-  }
+  const fromRef=d[qActive].val;
+  const fromName=d[qActive].name;
 
-  const baseFrom = parseFloat(params[activeIdx].value);
-
-  const cards = params.map((p, i) => {
-    if(i === activeIdx) return null;
-    const baseTo = parseFloat(p.value);
-    // proportion: inputVal / baseFrom = result / baseTo
-    const result = (inputVal * baseTo) / baseFrom;
-    const ratio = baseTo / baseFrom;
-
-    return `<div class="rcard">
-      <div class="rc-label">${esc(p.name)}</div>
-      <div class="rc-val">${fmt(result)}</div>
-      <div class="rc-name">${esc(p.name)}</div>
-      <div class="rc-ratio">
-        ${fmt(inputVal)} ${esc(params[activeIdx].name)} × (${fmt(baseTo)} / ${fmt(baseFrom)}) = ${fmt(result)}
+  const cards=d.map((item,i)=>{
+    if(i===qActive)return null;
+    const result=(qVal*item.val)/fromRef;
+    return `<div class="tv-rcard">
+      <div class="tv-rc-lbl">${esc(item.name)}</div>
+      <div class="tv-rc-val">${fmt(result)}</div>
+      <div class="tv-rc-name">${esc(item.name)}</div>
+      <div class="tv-rc-how">
+        ${fmt(qVal)} ${esc(fromName)}<br>
+        × (${fmt(item.val)} / ${fmt(fromRef)})<br>
+        = ${fmt(result)} ${esc(item.name)}
       </div>
     </div>`;
   }).filter(Boolean).join('');
 
-  grid.innerHTML = cards;
+  res.innerHTML=cards;
 
-  // save to history
-  if(inputVal !== 0){
-    pushHist(inputVal, params[activeIdx].name);
-  }
+  // historial
+  const toStr=d.filter((_,i)=>i!==qActive).map(item=>`${fmt((qVal*item.val)/fromRef)} ${item.name}`).join(' · ');
+  pushHist('triple',`${fmt(qVal)} ${fromName}  →  ${toStr}`);
 }
 
-// ═══════════════════════════════════════════
-// HISTORY
-// ═══════════════════════════════════════════
-function pushHist(val, name){
-  const results = params
-    .filter((_,i) => i !== activeIdx)
-    .map(p => {
-      const base = parseFloat(params[activeIdx].value);
-      const res = (val * parseFloat(p.value)) / base;
-      return `${fmt(res)} ${p.name}`;
-    }).join(' · ');
-
-  const entry = { from: `${fmt(val)} ${name}`, to: results };
-  const last = history[history.length-1];
-  if(last && last.from === entry.from && last.to === entry.to) return;
-  history.push(entry);
-  if(history.length > 30) history.shift();
-  renderHist();
+function clearTriple(){
+  ['t-n1','t-n2','t-n3','t-v1','t-v2','t-v3'].forEach(id=>v(id).value='');
+  v('q-input').value='';
+  qActive=0;
+  renderQTabs();
 }
 
-function renderHist(){
-  const wrap = document.getElementById('hist-wrap');
-  const body = document.getElementById('hist-body');
-  if(history.length === 0){ wrap.style.display='none'; return; }
-  wrap.style.display = 'block';
-  body.innerHTML = [...history].reverse().slice(0,15).map(h=>`
-    <div class="hist-row">
-      <div class="hist-from">${esc(h.from)}</div>
-      <div class="hist-to">${esc(h.to)}</div>
-    </div>
-  `).join('');
+/* ────────────────────────────
+   HISTORIAL
+──────────────────────────── */
+function pushHist(tab,entry){
+  const arr=histData[tab];
+  if(arr.length&&arr[arr.length-1]===entry)return;
+  arr.push(entry);
+  if(arr.length>20)arr.shift();
+  renderHistTab(tab);
+}
+function renderHistTab(tab){
+  const wrap=v('hist-'+tab);
+  const body=v('hist-'+tab+'-body');
+  const arr=histData[tab];
+  if(!arr.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  body.innerHTML=[...arr].reverse().slice(0,12).map(e=>{
+    const parts=e.split('→');
+    return`<div class="hrow"><div class="hfrom">${esc(parts[0]||e)}</div><div class="hto">${esc(parts[1]||'')}</div></div>`;
+  }).join('');
+}
+function clearHist(tab){
+  histData[tab]=[];
+  renderHistTab(tab);
 }
 
-function clearHist(){
-  history = [];
-  renderHist();
-}
-
-// ═══════════════════════════════════════════
-// PRESETS
-// ═══════════════════════════════════════════
-const PRESETS = {
-  granos: [
-    {name:'Pesos ARS',      value:'40000000'},
-    {name:'USD Billete',    value:'28000'},
-    {name:'Toneladas',      value:'27.86'},
-  ],
-  obra: [
-    {name:'Presupuesto $',  value:'5000000'},
-    {name:'Metros²',        value:'120'},
-    {name:'Días de obra',   value:'45'},
-  ],
-  combustible: [
-    {name:'Litros',         value:'50'},
-    {name:'Kilómetros',     value:'600'},
-    {name:'Pesos $',        value:'67500'},
-  ],
-  cambio: [
-    {name:'ARS',            value:'1000000'},
-    {name:'USD',            value:'952'},
-    {name:'EUR',            value:'876'},
-  ],
-};
-
-function loadP(key){
-  const p = PRESETS[key];
-  if(!p) return;
-  params = p.map(x => ({id: nextId++, name: x.name, value: x.value}));
-  activeIdx = 0;
-  document.getElementById('main-input').value = '';
-  render();
-}
-
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
-loadP('granos');
+/* ────────────────────────────
+   INIT
+──────────────────────────── */
+renderQTabs();
 </script>
 </body>
 </html>
